@@ -38,12 +38,26 @@ async function main() {
     const stocks = [GME, MSFT, DIS, BNTX];
     //when you finish api use this line instead
     //const stocks = await getStocksFromApi()
-
+  
     //print out the GME stock prices
     console.log(stocks[0].values)
-
     const timeChartCanvas = document.querySelector('#time-chart');
     //Start coding the first chart here since it references the canvas on line 3   
+    stocks.forEach(stock => stock.values.reverse())
+    // Time Chart
+    new Chart(timeChartCanvas.getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: stocks[0].values.map(value => value.datetime),
+            datasets: stocks.map( stock => ({
+                label: stock.meta.symbol,
+                data: stock.values.map(value => parseFloat(value.high)),
+                backgroundColor:  getColor(stock.meta.symbol),
+                borderColor: getColor(stock.meta.symbol),
+            }))
+        }
+    });
+    
     
     const highestPriceChartCanvas = document.querySelector('#highest-price-chart');
     //build your second chart
