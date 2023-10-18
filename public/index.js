@@ -60,8 +60,43 @@ async function main() {
     
     
     const highestPriceChartCanvas = document.querySelector('#highest-price-chart');
-    //build your second chart
 
+// Extract highest prices and corresponding stock names
+const highestPrices = stocks.map(stock =>
+    Math.max(...stock.values.map(value => parseFloat(value.high)))
+);
+const stockNames = stocks.map(stock => stock.meta.symbol);
+
+// Build your second chart
+new Chart(highestPriceChartCanvas.getContext('2d'), {
+    type: 'bar',
+    data: {
+        labels: stockNames,
+        datasets: [{
+            label: 'Highest Price',
+            data: highestPrices,
+            backgroundColor: stocks.map(stock => getColor(stock.meta.symbol)),
+            borderColor: stocks.map(stock => getColor(stock.meta.symbol)),
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                type: 'category', // Use category type for stock names
+                labels: stockNames, // Specify the labels for the x-axis
+                position: 'bottom'
+            },
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Highest Price'
+                }
+            }
+        }
+    }
+});
+    
     const averagePriceChartCanvas = document.querySelector('#average-price-chart');
     //this is the bonus you don't have to do it
 
